@@ -5,15 +5,21 @@
             <li><a href="">Video-Aula</a></li>
             <li><a href="">Configurações</a></li>
         </ul>
+        <div class="container-profile">
+            <MiniProfile></MiniProfile>
+        </div>
     </nav>
 </template>
 
 
 <script>
+import MiniProfile from '@/components/MiniProfile.vue';
+
 export default {
   name: 'Header',
+  components: { MiniProfile },
   props: {
-    msg: String
+    isLogged: Boolean
   }
 }
 </script>
@@ -23,6 +29,7 @@ export default {
 .header {
     height: 100%;
     background-color: #f1f1f1;
+    display: flex;
 }
 
 ul {
@@ -60,5 +67,12 @@ a:hover {
     background-color: #5d7df3;
     border: 0.9px solid;
     border-radius: 3px;
+}
+
+.container-profile {
+    width: 50%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
 }
 </style>

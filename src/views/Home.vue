@@ -1,6 +1,6 @@
 <template>
 <div class="container-header">
-  <Header v-bind:msg="'by'"></Header>
+  <Header></Header>
 </div>
 </template>
 
@@ -9,10 +9,7 @@ import Header from '@/components/Header.vue';
 
 export default {
   name: 'Home',
-  components: { Header },
-  props: {
-    msg: String
-  }
+  components: { Header }
 }
 </script>
 
