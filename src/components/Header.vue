@@ -6,7 +6,7 @@
             <li><a href="">Configurações</a></li>
         </ul>
         <div class="container-profile">
-            <MiniProfile></MiniProfile>
+            <MiniProfile :isLogged="true"></MiniProfile>
         </div>
     </nav>
 </template>
@@ -18,9 +18,6 @@ import MiniProfile from '@/components/MiniProfile.vue';
 export default {
   name: 'Header',
   components: { MiniProfile },
-  props: {
-    isLogged: Boolean
-  }
 }
 </script>
 
@@ -50,7 +47,6 @@ li {
 }
 
 a {
-    font-family: cursive;
     font-size: x-large;
     text-decoration: none;
     height: 100%;
