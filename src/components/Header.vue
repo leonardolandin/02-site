@@ -14,10 +14,16 @@
 
 <script>
 import MiniProfile from '@/components/MiniProfile.vue';
+import UserAPI from '@/services/User';
 
 export default {
   name: 'Header',
   components: { MiniProfile },
+  mounted() {
+      UserAPI.getUser().then(teste => {
+          console.log(teste)
+      })
+  }
 }
 </script>
 
