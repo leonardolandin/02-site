@@ -17,7 +17,7 @@
 <script>
 export default {
     props: {
-        isLogged: { type: Boolean, required: true }
+        isLogged: {type: Boolean, required: true}
     }
 }
 </script>

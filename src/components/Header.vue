@@ -6,7 +6,7 @@
             <li><a href="">Configurações</a></li>
         </ul>
         <div class="container-profile">
-            <MiniProfile :isLogged="true"></MiniProfile>
+            <MiniProfile v-bind:isLogged="this.userLogged"></MiniProfile>
         </div>
     </nav>
 </template>
@@ -19,9 +19,19 @@ import UserAPI from '@/services/User';
 export default {
   name: 'Header',
   components: { MiniProfile },
+  data() {
+      return {
+          token: localStorage.getItem('userToken') || null,
+          userLogged: {type: Boolean, required: true}
+      }
+  },
   mounted() {
-      UserAPI.getUser().then(teste => {
-          console.log(teste)
+      UserAPI.getUserLogged(this.token).then(response => {
+          if(response.data) {
+            this.userLogged = true;
+          }
+      }).catch(() => {
+          this.userLogged = false;
       })
   }
 }

@@ -1,7 +1,7 @@
 import { http } from '@/services/config'
 
 export default {
-    getUser: () => {
-        return http.get('user');
+    getUserLogged: (token) => {
+        return http.get(`userLogged/${token}`);
     }
 }
