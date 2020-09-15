@@ -1,7 +1,12 @@
 <template>
-    <div v-if="isLogged == true" class="userLogged">
+    <div v-if="isLogged == true" class="userLogged" v-on:click="showOrHideUserOptions">
         <img src="@/assets/header/user.png">
-        <span>palhaço</span>
+        <span>{{user.name}}</span>
+        <div class="userOptions" v-bind:class="{ active: this.isActive }">
+            <a href="/perfil">Meu Perfil</a>
+            <a href="/minhas-atividades">Minhas Atividades</a>
+            <a class="last" v-on:click="logoff">Sair</a>
+        </div>
     </div>
     <a v-else href="/entrar">
         <div class="userNotLogged">
@@ -15,9 +20,22 @@
 
 
 <script>
+
 export default {
-    props: {
-        isLogged: {type: Boolean, required: true}
+    props: ['isLogged', 'user'],
+    data() {
+        return {
+            isActive: false
+        }
+    },
+    methods: {
+        showOrHideUserOptions() {
+            this.isActive = !this.isActive;
+        },
+        logoff() {
+            this.isLogged = false;
+            localStorage.removeItem('userToken');
+        }   
     }
 }
 </script>
@@ -27,7 +45,9 @@ export default {
     .userLogged {
         display: flex;
         align-items: center;
-        margin-right: 40px;
+        height: 100%;
+        width: 20%;
+        cursor: pointer;
     }
 
     .userNotLogged {
@@ -52,5 +72,46 @@ export default {
     .userNotLogged > img {
         height: 30px;
         margin-right: 10px;
+    }
+
+    .userOptions {
+        position: absolute;
+        height: 15%;
+        width: 10%;
+        background-color: #f1f1f1;
+        top: -40px;
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+        z-index: -1;
+        transition: all 0.2s;
+    }
+
+    a {
+        font-size: 18px;
+        text-decoration: none;
+        height: 33%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: 0.5s all;
+        color: black;
+    }
+
+    a:hover {
+        color: white;
+        background-color: #5d7df3;
+        border: 0.9px solid;
+        border-radius: 3px;
+    }
+
+    .last:hover {
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+    }
+
+    .active {
+        top: 110px;
+        z-index: 1;
     }
 </style>
