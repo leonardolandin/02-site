@@ -11,11 +11,11 @@
                     <form>
                         <div class="formGroup">
                             <label for="username">E-mail</label>
-                            <input type="text" id="username" name="username" required="required">
+                            <input type="text" id="username" name="email" placeholder="Digite seu e-mail" required="required">
                         </div>
                         <div class="formGroup">
                             <label for="password">Senha</label>
-                            <input type="password" id="password" name="password" required="required">
+                            <input type="password" id="password" name="password" placeholder="Digite sua senha" required="required">
                         </div>
                         <div class="formGroup">
                             <label class="formRemember">
@@ -33,8 +33,31 @@
 </template>
 
 <script>
-export default {
+import Environment from '@/services/Environment'
 
+export default {
+    data() {
+        return {
+            secret: Environment.getSecretRecaptcha()
+        }
+    },
+    mounted() {
+        this.loadScriptAsync(Environment.getUrlRecaptcha() + this.secret)
+    },
+    methods: {
+        loadScriptAsync: function(url) {
+            return new Promise(function(resolve) {
+                let tag = document.createElement('script');
+                tag.src = url;
+                tag.async = true;
+                tag.onload = () => {
+                    resolve();
+                };
+                let firstScriptTag = document.getElementsByTagName('script')[0];
+                firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+            });
+        }
+    }
 }
 </script>
 
@@ -159,7 +182,7 @@ export default {
     .formGroup > input {
         outline: none;
         display: block;
-        background: rgba(0, 0, 0, 0.1);
+        background: rgba(0, 0, 0, 0.05);
         width: 100%;
         border: 0;
         border-radius: 4px;
@@ -201,5 +224,9 @@ export default {
         line-height: inherit;
         text-transform: uppercase;
         cursor: pointer;
+    }
+
+    .invalidField {
+        border: 2px solid red;
     }
 </style>

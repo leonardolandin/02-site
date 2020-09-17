@@ -9,3 +9,5 @@ services:
     ports:
      - 8080:8080
     command: ['npm', 'run' ,'serve']
+    environment:
+      SECRET_RECAPTCHA: 6LcXn9cUAAAAAAt20FK3qLQ0tmqZnQ2yLeUhxRkQ
