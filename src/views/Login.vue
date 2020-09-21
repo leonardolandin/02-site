@@ -11,11 +11,13 @@
                     <form>
                         <div class="formGroup">
                             <label for="username">E-mail</label>
-                            <input type="text" id="username" name="email" placeholder="Digite seu e-mail" required="required">
+                            <input type="text" id="username" name="email" placeholder="Digite seu e-mail" required="required" v-bind:class="{ invalidField: this.errorInput }">
+                            <span class="errorInput">email fraco</span>
                         </div>
                         <div class="formGroup">
                             <label for="password">Senha</label>
                             <input type="password" id="password" name="password" placeholder="Digite sua senha" required="required">
+                            <span class="errorInput">teste</span>
                         </div>
                         <div class="formGroup">
                             <label class="formRemember">
@@ -38,7 +40,8 @@ import Environment from '@/services/Environment'
 export default {
     data() {
         return {
-            secret: Environment.getSecretRecaptcha()
+            secret: Environment.getSecretRecaptcha(),
+            errorInput: false
         }
     },
     mounted() {
@@ -56,6 +59,9 @@ export default {
                 let firstScriptTag = document.getElementsByTagName('script')[0];
                 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
             });
+        },
+        submitLogin: function() {
+
         }
     }
 }
@@ -227,6 +233,11 @@ export default {
     }
 
     .invalidField {
-        border: 2px solid red;
+        border: 2px solid red !important;
+    }
+
+    .errorInput {
+        color: red;
+        margin-top: 15px;
     }
 </style>
