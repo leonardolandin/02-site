@@ -4,7 +4,7 @@ export default {
     getUserLogged: (token) => {
         return http.get(`userLogged/${token}`);
     },
-    getUserByEmail: () => { 
-
+    getUserByEmail: (objCredentials) => { 
+        return http.post('login', objCredentials)
     }
 }

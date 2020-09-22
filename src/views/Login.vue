@@ -11,13 +11,13 @@
                     <form>
                         <div class="formGroup">
                             <label for="username">E-mail</label>
-                            <input type="text" id="username" name="email" placeholder="Digite seu e-mail" required="required" v-bind:class="{ invalidField: this.errorInput }">
-                            <span class="errorInput">email fraco</span>
+                            <input type="text" id="username" name="email" placeholder="Digite seu e-mail" v-model="user.email" required="required" v-bind:class="{ invalidField: this.errorInput }">
+                            <span class="errorInput">{{user.email}}</span>
                         </div>
                         <div class="formGroup">
                             <label for="password">Senha</label>
-                            <input type="password" id="password" name="password" placeholder="Digite sua senha" required="required">
-                            <span class="errorInput">teste</span>
+                            <input type="password" id="password" name="password" v-model="user.password" placeholder="Digite sua senha" required="required">
+                            <span class="errorInput">{{user.password}}</span>
                         </div>
                         <div class="formGroup">
                             <label class="formRemember">
@@ -25,7 +25,7 @@
                         </label><a class="formRecovery" href="#">Esqueceu a senha?</a>
                         </div>
                         <div class="formGroup">
-                            <button type="submit">Entrar</button>
+                            <button v-on:click="submitLogin(user)" type="button">Entrar</button>
                         </div>
                     </form>
                 </div>
@@ -36,12 +36,16 @@
 
 <script>
 import Environment from '@/services/Environment'
+import User from '@/services/User'
 
 export default {
     data() {
         return {
             secret: Environment.getSecretRecaptcha(),
-            errorInput: false
+            errorInput: false,
+            errorPass: '',
+            errorEmail: '',
+            user: {}
         }
     },
     mounted() {
@@ -60,8 +64,17 @@ export default {
                 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
             });
         },
-        submitLogin: function() {
-
+        submitLogin: function(user) {
+            window.grecaptcha.ready(() => {
+                window.grecaptcha.execute(this.secret, {action: 'login'}).then(function(token) {
+                    user.recaptcha = token;
+                    User.getUserByEmail(user).then((response) => {
+                        console.log(response)
+                    }).catch((error) => {
+                        console.log(error)
+                    })
+                })
+            })
         }
     }
 }
