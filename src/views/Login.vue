@@ -12,12 +12,10 @@
                         <div class="formGroup">
                             <label for="username">E-mail</label>
                             <input type="text" id="username" name="email" placeholder="Digite seu e-mail" v-model="user.email" required="required" v-bind:class="{ invalidField: this.errorInput }">
-                            <span class="errorInput">{{user.email}}</span>
                         </div>
                         <div class="formGroup">
                             <label for="password">Senha</label>
                             <input type="password" id="password" name="password" v-model="user.password" placeholder="Digite sua senha" required="required">
-                            <span class="errorInput">{{user.password}}</span>
                         </div>
                         <div class="formGroup">
                             <label class="formRemember">
@@ -27,6 +25,7 @@
                         <div class="formGroup">
                             <button v-on:click="submitLogin(user)" type="button">Entrar</button>
                         </div>
+                            <span class="errorInput">{{error}}</span>
                     </form>
                 </div>
             </div>
@@ -43,8 +42,7 @@ export default {
         return {
             secret: Environment.getSecretRecaptcha(),
             errorInput: false,
-            errorPass: '',
-            errorEmail: '',
+            error: '',
             user: {}
         }
     },
@@ -65,13 +63,16 @@ export default {
             });
         },
         submitLogin: function(user) {
+            let vm = this;
+            console.log(vm)
             window.grecaptcha.ready(() => {
                 window.grecaptcha.execute(this.secret, {action: 'login'}).then(function(token) {
                     user.recaptcha = token;
-                    User.getUserByEmail(user).then((response) => {
+                    User.getUserByEmail(user).then(response => {
+                        vm.error = 'teste'
                         console.log(response)
                     }).catch((error) => {
-                        console.log(error)
+                        vm = error.data.message
                     })
                 })
             })
