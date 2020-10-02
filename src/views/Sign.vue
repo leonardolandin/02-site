@@ -5,30 +5,28 @@
             </div>
             <div class="formPanel login">
                 <div class="headerLogin">
-                    <h1>Login</h1>
+                    <h1>Cadastrar</h1>
                 </div>
                 <div class="loginContent">
                     <form>
                         <div class="formGroup">
+                            <label for="username">Nome</label>
+                            <input type="text" id="username" name="email" placeholder="Digite seu nome" required="required">
+                        </div>                        
+                        <div class="formGroup">
                             <label for="username">E-mail</label>
-                            <input type="text" id="username" name="email" placeholder="Digite seu e-mail" v-model="user.email" required="required" v-bind:class="{ invalidField: this.errorInput }">
+                            <input type="text" id="username" name="email" placeholder="Digite seu e-mail" required="required">
                         </div>
                         <div class="formGroup">
                             <label for="password">Senha</label>
-                            <input type="password" id="password" name="password" v-model="user.password" placeholder="Digite sua senha" required="required" v-bind:class="{ invalidField: this.errorInput }">
+                            <input type="password" id="password" name="password" placeholder="Digite sua senha" required="required">
                         </div>
                         <div class="formGroup">
-                            <label class="formRemember">
-                                <input type="checkbox" v-model="remember">Lembrar Meu Dados
-                            </label>
-                            <a class="formRecovery" href="#">Esqueceu a senha?</a>
+                            <label for="password">Confirmar senha</label>
+                            <input type="password" id="password" name="password" placeholder="Digite sua senha" required="required">
                         </div>
                         <div class="formGroup">
-                            <button v-on:click="submitLogin(user)" type="button">Entrar</button>
-                        </div>
-                        <span class="errorInput">{{error}}</span>
-                        <div class="formGroup centerSign">
-                            <a href="/cadastrar" class="formSign ">Cadastrar-se</a>
+                            <button type="button">Cadastrar</button>
                         </div>
                     </form>
                 </div>
@@ -37,86 +35,6 @@
     </div>
 </template>
 
-<script>
-import Environment from '@/services/Environment'
-import User from '@/services/User'
-
-export default {
-    data() {
-        return {
-            secret: Environment.getSecretRecaptcha(),
-            errorInput: false,
-            error: '',
-            user: {},
-            remember: false,
-            token: localStorage.getItem('userToken') || null
-        }
-    },
-    mounted() {
-        this.loadScriptAsync(Environment.getUrlRecaptcha() + this.secret);
-
-        User.getUserLogged(this.token).then(response => {
-          if(response.data) {
-              this.$router.push('/')
-          }
-        })
-
-        let rememberStorage =  JSON.parse(localStorage.getItem('rememberMe'))
-
-        if(rememberStorage !== undefined && rememberStorage !== null) {
-            this.remember = rememberStorage.remember;
-            this.user.email = rememberStorage.email;
-            this.user.password = rememberStorage.password;
-        }
-    },
-    methods: {
-        loadScriptAsync: function(url) {
-            return new Promise(function(resolve) {
-                let tag = document.createElement('script');
-                tag.src = url;
-                tag.async = true;
-                tag.onload = () => {
-                    resolve();
-                };
-                let firstScriptTag = document.getElementsByTagName('script')[0];
-                firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-            });
-        },
-        submitLogin: function(user) {
-            let vm = this;
-            window.grecaptcha.ready(() => {
-                window.grecaptcha.execute(this.secret, {action: 'login'}).then(function(token) {
-                    user.recaptcha = token;
-                    User.getUserByEmail(user).then(response => {
-                        let userLogged = {
-                            user: response.data.user
-                        }
-                        let rememberMe = {
-                            email: userLogged.user.email,
-                            password: userLogged.user.password,
-                            remember: vm.remember
-                        }
-
-                        localStorage.setItem('userToken', userLogged.user.token);
-                        
-                        if(vm.remember) {
-                            localStorage.setItem('rememberMe', JSON.stringify(rememberMe))
-                        } else {
-                            localStorage.removeItem('rememberMe');
-                        }
-
-                        vm.$router.push('/');
-                    }).catch((error) => {
-                        console.log(error)
-                        vm.error = error.response.data.message || "Ocorreu um erro inesperado";
-                        vm.errorInput = true;
-                    })
-                })
-            })
-        }
-    }
-}
-</script>
 
 <style scoped>
     .containerBackground {
