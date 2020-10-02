@@ -4,6 +4,12 @@ import router from '@/router'
 
 Vue.config.productionTip = false
 
+router.afterEach((to) => {
+  Vue.nextTick(() => {
+      document.title = to.meta.title;
+  });
+});
+
 new Vue({
   render: h => h(App),
   router

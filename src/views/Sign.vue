@@ -11,19 +11,19 @@
                     <form>
                         <div class="formGroup">
                             <label for="username">Nome</label>
-                            <input type="text" id="username" name="email" placeholder="Digite seu nome" required="required">
+                            <input type="text" id="username" name="email" v-model="user.name" placeholder="Digite seu nome" required="required">
                         </div>                        
                         <div class="formGroup">
                             <label for="username">E-mail</label>
-                            <input type="text" id="username" name="email" placeholder="Digite seu e-mail" required="required">
+                            <input type="text" id="username" name="email" v-model="user.email" placeholder="Digite seu e-mail" required="required">
                         </div>
                         <div class="formGroup">
                             <label for="password">Senha</label>
-                            <input type="password" id="password" name="password" placeholder="Digite sua senha" required="required">
+                            <input type="password" id="password" name="password" v-model="user.password" placeholder="Digite sua senha" required="required">
                         </div>
                         <div class="formGroup">
                             <label for="password">Confirmar senha</label>
-                            <input type="password" id="password" name="password" placeholder="Digite sua senha" required="required">
+                            <input type="password" id="password" name="password" v-model="user.confirmedPassword" placeholder="Digite sua senha" required="required">
                         </div>
                         <div class="formGroup">
                             <button type="button">Cadastrar</button>
@@ -34,6 +34,44 @@
         </div>
     </div>
 </template>
+
+<script>
+import Environment from '@/services/Environment'
+import User from '@/services/User'
+
+export default {
+    data() {
+        return {
+            user: {},
+            token: localStorage.getItem('userToken') || null,
+            secret: Environment.getSecretRecaptcha()
+        }
+    },
+    mounted() {
+        this.loadScriptAsync(Environment.getUrlRecaptcha() + this.secret);
+
+        User.getUserLogged(this.token).then(response => {
+          if(response.data) {
+              this.$router.push('/')
+          }
+        })
+    },
+    methods: {
+        loadScriptAsync: function(url) {
+            return new Promise(function(resolve) {
+                let tag = document.createElement('script');
+                tag.src = url;
+                tag.async = true;
+                tag.onload = () => {
+                    resolve();
+                };
+                let firstScriptTag = document.getElementsByTagName('script')[0];
+                firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+            });
+        }
+    }
+}
+</script>
 
 
 <style scoped>

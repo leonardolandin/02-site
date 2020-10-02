@@ -16,12 +16,14 @@ const routes = [
     {
         name: 'login',
         path: '/entrar',
-        component: Login
+        component: Login,
+        meta: { title: 'Entrar - 02'}
     },
     {
         name: 'sign',
         path: '/cadastrar',
-        component: Sign
+        component: Sign,
+        meta: { title: 'Cadastrar - 02'}
     }
 ]
 
