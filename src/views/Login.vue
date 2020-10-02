@@ -15,11 +15,11 @@
                         </div>
                         <div class="formGroup">
                             <label for="password">Senha</label>
-                            <input type="password" id="password" name="password" v-model="user.password" placeholder="Digite sua senha" required="required">
+                            <input type="password" id="password" name="password" v-model="user.password" placeholder="Digite sua senha" required="required" v-bind:class="{ invalidField: this.errorInput }">
                         </div>
                         <div class="formGroup">
                             <label class="formRemember">
-                            <input type="checkbox">Lembrar Meu Dados
+                            <input type="checkbox" v-model="remember">Lembrar Meu Dados
                         </label><a class="formRecovery" href="#">Esqueceu a senha?</a>
                         </div>
                         <div class="formGroup">
@@ -43,11 +43,27 @@ export default {
             secret: Environment.getSecretRecaptcha(),
             errorInput: false,
             error: '',
-            user: {}
+            user: {},
+            remember: false,
+            token: localStorage.getItem('userToken') || null
         }
     },
     mounted() {
-        this.loadScriptAsync(Environment.getUrlRecaptcha() + this.secret)
+        this.loadScriptAsync(Environment.getUrlRecaptcha() + this.secret);
+
+        User.getUserLogged(this.token).then(response => {
+          if(response.data) {
+              this.$router.push('/')
+          }
+        })
+
+        let rememberStorage =  JSON.parse(localStorage.getItem('rememberMe'))
+
+        if(rememberStorage !== undefined && rememberStorage !== null) {
+            this.remember = rememberStorage.remember;
+            this.user.email = rememberStorage.email;
+            this.user.password = rememberStorage.password;
+        }
     },
     methods: {
         loadScriptAsync: function(url) {
@@ -64,15 +80,32 @@ export default {
         },
         submitLogin: function(user) {
             let vm = this;
-            console.log(vm)
             window.grecaptcha.ready(() => {
                 window.grecaptcha.execute(this.secret, {action: 'login'}).then(function(token) {
                     user.recaptcha = token;
                     User.getUserByEmail(user).then(response => {
-                        vm.error = 'teste'
-                        console.log(response)
+                        let userLogged = {
+                            user: response.data.user
+                        }
+                        let rememberMe = {
+                            email: userLogged.user.email,
+                            password: userLogged.user.password,
+                            remember: vm.remember
+                        }
+
+                        localStorage.setItem('userToken', userLogged.user.token);
+                        
+                        if(vm.remember) {
+                            localStorage.setItem('rememberMe', JSON.stringify(rememberMe))
+                        } else {
+                            localStorage.removeItem('rememberMe');
+                        }
+
+                        vm.$router.push('/');
                     }).catch((error) => {
-                        vm = error.data.message
+                        console.log(error)
+                        vm.error = error.response.data.message || "Ocorreu um erro inesperado";
+                        vm.errorInput = true;
                     })
                 })
             })

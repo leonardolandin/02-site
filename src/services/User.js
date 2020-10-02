@@ -8,7 +8,7 @@ let config = {
 
 export default {
     getUserLogged: (token) => {
-        return http.get(`userLogged/${token}`);
+        return http.post(`userLogged`, {token});
     },
     getUserByEmail: (objCredentials) => { 
         return http.post('login', objCredentials, config)
