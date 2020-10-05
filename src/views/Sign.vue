@@ -11,23 +11,24 @@
                     <form>
                         <div class="formGroup">
                             <label for="username">Nome</label>
-                            <input type="text" id="username" name="email" v-model="user.name" placeholder="Digite seu nome" required="required">
+                            <input type="text" id="username" name="email" v-model="user.name" placeholder="Digite seu nome" v-bind:class="{ invalidField: this.errorInput }" required="required">
                         </div>                        
                         <div class="formGroup">
                             <label for="username">E-mail</label>
-                            <input type="text" id="username" name="email" v-model="user.email" placeholder="Digite seu e-mail" required="required">
+                            <input type="text" id="username" name="email" v-model="user.email" placeholder="Digite seu e-mail" v-bind:class="{ invalidField: this.errorInput }" required="required">
                         </div>
                         <div class="formGroup">
                             <label for="password">Senha</label>
-                            <input type="password" id="password" name="password" v-model="user.password" placeholder="Digite sua senha" required="required">
+                            <input type="password" id="password" name="password" v-model="user.password" placeholder="Digite sua senha" v-bind:class="{ invalidField: this.errorInput }" required="required">
                         </div>
                         <div class="formGroup">
                             <label for="password">Confirmar senha</label>
-                            <input type="password" id="password" name="password" v-model="user.confirmedPassword" placeholder="Digite sua senha" required="required">
+                            <input type="password" id="password" name="password" v-model="user.passwordConfirmed" placeholder="Digite sua senha" v-bind:class="{ invalidField: this.errorInput }" required="required">
                         </div>
                         <div class="formGroup">
-                            <button type="button">Cadastrar</button>
+                            <button type="button" v-on:click="submitSign(user)">Cadastrar</button>
                         </div>
+                        <span class="errorInput">{{error}}</span>
                     </form>
                 </div>
             </div>
@@ -44,7 +45,9 @@ export default {
         return {
             user: {},
             token: localStorage.getItem('userToken') || null,
-            secret: Environment.getSecretRecaptcha()
+            secret: Environment.getSecretRecaptcha(),
+            errorInput: false,
+            error: ''
         }
     },
     mounted() {
@@ -68,6 +71,25 @@ export default {
                 let firstScriptTag = document.getElementsByTagName('script')[0];
                 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
             });
+        },
+        submitSign: function(user) {
+            let vm = this;
+
+            window.grecaptcha.ready(() => {
+                window.grecaptcha.execute(this.secret, {action: 'login'}).then(function(token) {
+                    user.recaptcha = token;
+                    User.signUser(user).then(response => {
+                        if(response.data.user) {
+                            localStorage.setItem('userToken', response.data.user.token);
+
+                            vm.$router.push('/');
+                        }
+                    }).catch((error) => {
+                        vm.error = error.response.data.message;
+                        vm.errorInput = true;
+                    })
+                })
+            })
         }
     }
 }
@@ -246,15 +268,13 @@ export default {
     .errorInput {
         color: red;
         margin-top: 15px;
+        display: flex;
+        justify-content: center;
     }
 
     .formSign {
         color: #4285F4;
         font-size: 18px;
         text-decoration: none;
-    }
-
-    .centerSign {
-        justify-content: center;
     }
 </style>

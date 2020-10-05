@@ -11,6 +11,9 @@ export default {
         return http.post(`userLogged`, {token});
     },
     getUserByEmail: (objCredentials) => { 
-        return http.post('login', objCredentials, config)
+        return http.post('login', objCredentials, config);
+    },
+    signUser: (userCredentials) => {
+        return http.post('register', userCredentials);
     }
 }
