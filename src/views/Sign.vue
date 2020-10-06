@@ -15,7 +15,7 @@
                         </div>                        
                         <div class="formGroup">
                             <label for="username">E-mail</label>
-                            <input type="text" id="username" name="email" v-model="user.email" placeholder="Digite seu e-mail" v-bind:class="{ invalidField: this.errorInput }" required="required">
+                            <input type="text" id="email" name="email" v-model="user.email" placeholder="Digite seu e-mail" v-bind:class="{ invalidField: this.errorInput }" required="required">
                         </div>
                         <div class="formGroup">
                             <label for="password">Senha</label>
@@ -23,7 +23,7 @@
                         </div>
                         <div class="formGroup">
                             <label for="password">Confirmar senha</label>
-                            <input type="password" id="password" name="password" v-model="user.passwordConfirmed" placeholder="Digite sua senha" v-bind:class="{ invalidField: this.errorInput }" required="required">
+                            <input type="password" id="passwordConfirmed" name="password" v-model="user.passwordConfirmed" placeholder="Digite sua confirmação de senha" v-bind:class="{ invalidField: this.errorInput }" required="required">
                         </div>
                         <div class="formGroup">
                             <button type="button" v-on:click="submitSign(user)">Cadastrar</button>
@@ -232,19 +232,6 @@ export default {
         transition: 0.3s ease;
     }
 
-    .formRemember {
-        font-size: 12px;
-        font-weight: 400;
-        letter-spacing: 0;
-        text-transform: none;
-    }
-
-    .formRecovery {
-        color: #4285F4;
-        font-size: 12px;
-        text-decoration: none;
-    }
-
     .loginContent > form > .formGroup > button {
         outline: none;
         background: #4285F4;
@@ -270,11 +257,5 @@ export default {
         margin-top: 15px;
         display: flex;
         justify-content: center;
-    }
-
-    .formSign {
-        color: #4285F4;
-        font-size: 18px;
-        text-decoration: none;
     }
 </style>
