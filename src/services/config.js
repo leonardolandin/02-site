@@ -1,5 +1,5 @@
 import axios from 'axios'
 
 export const http = axios.create({
-    baseURL: "http://localhost:8081"
+    baseURL: process.env.VUE_APP_API_URL || 'http://localhost:8081'
 })
