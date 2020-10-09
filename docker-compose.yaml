@@ -10,4 +10,5 @@ services:
      - 8080:8080
     command: ['npm', 'run' ,'serve']
     environment:
-      SECRET_RECAPTCHA: 6LcXn9cUAAAAAAt20FK3qLQ0tmqZnQ2yLeUhxRkQ
+      VUE_APP_SECRET_RECAPTCHA: ${VUE_APP_SECRET_RECAPTCHA}
+      VUE_APP_URL_RECAPTCHA: ${VUE_APP_URL_RECAPTCHA}

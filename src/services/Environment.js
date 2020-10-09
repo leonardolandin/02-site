@@ -1,8 +1,9 @@
 export default {
     getSecretRecaptcha: () => {
-        return "6LcXn9cUAAAAAAt20FK3qLQ0tmqZnQ2yLeUhxRkQ"
+        console.log(process.env)
+        return process.env.VUE_APP_SECRET_RECAPTCHA
     },
     getUrlRecaptcha: () => {
-        return "https://www.google.com/recaptcha/api.js?render="
+        return process.env.VUE_APP_URL_RECAPTCHA
     }
 }
