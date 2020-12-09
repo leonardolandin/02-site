@@ -1,9 +1,10 @@
 <template>
     <nav class="header">
         <ul>
-            <li><a href="/">Inicio</a></li>
-            <li><a href="">Video-Aula</a></li>
-            <li><a href="">Configurações</a></li>
+            <li v-if="isMobile" class="burger-icon-container"><img src="@/assets/header/icon-burger.png" alt="Hamburguer" class="burger-icon"></li>
+            <li v-if="!isMobile"><a href="/" class="home">Inicio</a></li>
+            <li v-if="!isMobile"><a href="" class="video">Video-Aula</a></li>
+            <li v-if="!isMobile"><a href="" class="configuration">Configurações</a></li>
         </ul>
         <div class="container-profile">
             <MiniProfile v-bind:isLogged="this.userLogged" :user="this.user"></MiniProfile>
@@ -15,6 +16,7 @@
 <script>
 import MiniProfile from '@/components/MiniProfile.vue';
 import UserAPI from '@/services/User';
+import { isMobile } from 'mobile-device-detect';
 
 export default {
   name: 'Header',
@@ -23,7 +25,8 @@ export default {
       return {
           token: localStorage.getItem('userToken') || null,
           userLogged: { type: Boolean, required: true },
-          user: { type: Object }
+          user: { type: Object },
+          isMobile: isMobile
       }
   },
   mounted() {
@@ -89,4 +92,27 @@ a:hover {
     justify-content: flex-end;
     align-items: center;
 }
+
+.burger-icon-container {
+    justify-content: end;
+}
+
+
+@media only screen and (max-width: 414px) {
+    .configuration, .video {
+        display: none;
+    }
+
+    .burger-icon {
+        display: block;
+        height: 40%;
+        margin-left: 10px;
+    }
+
+    .userLogged {
+        width: auto;
+        margin-right: 10px;
+    }
+}
+
 </style>

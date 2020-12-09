@@ -301,4 +301,10 @@ export default {
     .centerSign {
         justify-content: center;
     }
+
+    @media only screen and (max-width: 414px) {
+            .containerLogin {
+                width: 350px;
+            }
+    }
 </style>
