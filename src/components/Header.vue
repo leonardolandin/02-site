@@ -1,7 +1,9 @@
 <template>
     <nav class="header">
+        <OverlayHeaderMobile :show="show" @close="openOverlay">
+        </OverlayHeaderMobile>
         <ul>
-            <li v-if="isMobile" class="burger-icon-container"><img src="@/assets/header/icon-burger.png" alt="Hamburguer" class="burger-icon"></li>
+            <li class="burger-icon-container"><img src="@/assets/header/icon-burger.png" @click="openOverlay" alt="Hamburguer" class="burger-icon"></li>
             <li v-if="!isMobile"><a href="/" class="home">Inicio</a></li>
             <li v-if="!isMobile"><a href="" class="video">Video-Aula</a></li>
             <li v-if="!isMobile"><a href="" class="configuration">Configurações</a></li>
@@ -15,18 +17,20 @@
 
 <script>
 import MiniProfile from '@/components/MiniProfile.vue';
+import OverlayHeaderMobile from '@/components/OverlayHeaderMobile.vue';
 import UserAPI from '@/services/User';
 import { isMobile } from 'mobile-device-detect';
 
 export default {
   name: 'Header',
-  components: { MiniProfile },
+  components: { MiniProfile, OverlayHeaderMobile },
   data() {
       return {
           token: localStorage.getItem('userToken') || null,
           userLogged: { type: Boolean, required: true },
           user: { type: Object },
-          isMobile: isMobile
+          isMobile: isMobile,
+          show: false
       }
   },
   mounted() {
@@ -38,6 +42,13 @@ export default {
       }).catch(() => {
           this.userLogged = false;
       })
+  },
+  methods: {
+      openOverlay: function() {
+          this.show = !this.show;
+
+          isMobile ? (document.body.style.overflow = "hidden") : (document.body.style.overflow = "visible");
+      }
   }
 }
 </script>
@@ -95,11 +106,12 @@ a:hover {
 
 .burger-icon-container {
     justify-content: end;
+    display: none;
 }
 
 
 @media only screen and (max-width: 414px) {
-    .configuration, .video {
+    .home ,.configuration, .video {
         display: none;
     }
 
@@ -107,6 +119,10 @@ a:hover {
         display: block;
         height: 40%;
         margin-left: 10px;
+    }
+
+    .burger-icon-container {
+        display: flex;
     }
 
     .userLogged {

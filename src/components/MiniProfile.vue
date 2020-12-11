@@ -114,4 +114,14 @@ export default {
         top: 110px;
         z-index: 1;
     }
+
+    @media only screen and (max-width: 414px) {
+        .userOptions {
+            width: 34%;
+        }
+
+        a {
+            text-align: center;
+        }
+    }
 </style>

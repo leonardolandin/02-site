@@ -107,7 +107,6 @@ export default {
 
                         vm.$router.push('/');
                     }).catch((error) => {
-                        console.log(error)
                         vm.error = error.response.data.message || "Ocorreu um erro inesperado";
                         vm.errorInput = true;
                     })
