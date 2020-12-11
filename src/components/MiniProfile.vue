@@ -20,7 +20,6 @@
 
 
 <script>
-
 export default {
     props: ['isLogged', 'user'],
     data() {

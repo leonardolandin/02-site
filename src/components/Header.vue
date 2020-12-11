@@ -1,15 +1,14 @@
 <template>
     <nav class="header">
-        <OverlayHeaderMobile :show="show" @close="openOverlay">
-        </OverlayHeaderMobile>
+        <OverlayHeaderMobile :show="show" :isMobile="this.isMobile" @close="openOverlay" />
         <ul>
             <li class="burger-icon-container"><img src="@/assets/header/icon-burger.png" @click="openOverlay" alt="Hamburguer" class="burger-icon"></li>
-            <li v-if="!isMobile"><a href="/" class="home">Inicio</a></li>
-            <li v-if="!isMobile"><a href="" class="video">Video-Aula</a></li>
-            <li v-if="!isMobile"><a href="" class="configuration">Configurações</a></li>
+            <li v-if="!isMobile || isTablet"><a href="/" class="home">Inicio</a></li>
+            <li v-if="!isMobile || isTablet"><a href="" class="video">Video-Aula</a></li>
+            <li v-if="!isMobile || isTablet"><a href="" class="configuration">Configurações</a></li>
         </ul>
         <div class="container-profile">
-            <MiniProfile v-bind:isLogged="this.userLogged" :user="this.user"></MiniProfile>
+            <MiniProfile v-bind:isLogged="this.userLogged" :user="this.user"/>
         </div>
     </nav>
 </template>
@@ -19,7 +18,7 @@
 import MiniProfile from '@/components/MiniProfile.vue';
 import OverlayHeaderMobile from '@/components/OverlayHeaderMobile.vue';
 import UserAPI from '@/services/User';
-import { isMobile } from 'mobile-device-detect';
+import { isMobile, isTablet } from 'mobile-device-detect';
 
 export default {
   name: 'Header',
@@ -30,6 +29,7 @@ export default {
           userLogged: { type: Boolean, required: true },
           user: { type: Object },
           isMobile: isMobile,
+          isTablet: isTablet,
           show: false
       }
   },
