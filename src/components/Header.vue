@@ -1,14 +1,14 @@
 <template>
     <nav class="header">
-        <OverlayHeaderMobile :show="show" :isMobile="this.isMobile" @close="openOverlay" />
+        <OverlayHeaderMobile :show="show" :isLogged="this.userLogged" :user="this.user" @close="openOverlay"/>
         <ul>
-            <li class="burger-icon-container"><img src="@/assets/header/icon-burger.png" @click="openOverlay" alt="Hamburguer" class="burger-icon"></li>
+            <li class="burger-icon-container"><img src="@/assets/header/mobile/icon-burger.png" @click="openOverlay" alt="Hamburguer" class="burger-icon"></li>
             <li v-if="!isMobile || isTablet"><a href="/" class="home">Inicio</a></li>
             <li v-if="!isMobile || isTablet"><a href="" class="video">Video-Aula</a></li>
             <li v-if="!isMobile || isTablet"><a href="" class="configuration">Configurações</a></li>
         </ul>
         <div class="container-profile">
-            <MiniProfile v-bind:isLogged="this.userLogged" :user="this.user"/>
+            <MiniProfile v-bind:isLogged="this.userLogged" :user="this.user" :isMobile="isMobile"/>
         </div>
     </nav>
 </template>

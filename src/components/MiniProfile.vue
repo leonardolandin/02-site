@@ -2,7 +2,7 @@
     <div v-if="isLogged == true" class="userLogged" v-on:click="showOrHideUserOptions">
         <img src="@/assets/header/user.png">
         <span>{{user.name}}</span>
-        <div class="userOptions" v-bind:class="{ active: this.isActive }">
+        <div v-if="!isMobile" class="userOptions" v-bind:class="{ active: this.isActive }">
             <a href="/perfil">Meu Perfil</a>
             <a href="/minhas-atividades">Minhas Atividades</a>
             <a class="last" v-on:click="logoff">Sair</a>
@@ -21,7 +21,7 @@
 
 <script>
 export default {
-    props: ['isLogged', 'user'],
+    props: ['isLogged', 'user', 'isMobile'],
     data() {
         return {
             isActive: false
