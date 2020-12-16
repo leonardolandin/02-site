@@ -1,6 +1,6 @@
 <template>
     <nav class="header">
-        <OverlayHeaderMobile :show="show" :isLogged="this.userLogged" :user="this.user" @close="openOverlay"/>
+        <OverlayHeaderMobile :show="show" :isLogged="this.userLogged" :user="this.user" @logoff="logoff" @close="openOverlay"/>
         <ul>
             <li class="burger-icon-container"><img src="@/assets/header/mobile/icon-burger.png" @click="openOverlay" alt="Hamburguer" class="burger-icon"></li>
             <li v-if="!isMobile || isTablet"><a href="/" class="home">Inicio</a></li>
@@ -48,6 +48,10 @@ export default {
           this.show = !this.show;
 
           isMobile ? (document.body.style.overflow = "hidden") : (document.body.style.overflow = "visible");
+      },
+      logoff: function() {
+          this.userLogged = false;
+          localStorage.removeItem('userToken');
       }
   }
 }

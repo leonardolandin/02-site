@@ -98,12 +98,8 @@ export default {
                         }
 
                         localStorage.setItem('userToken', userLogged.user.token);
-                        
-                        if(vm.remember) {
-                            localStorage.setItem('rememberMe', JSON.stringify(rememberMe))
-                        } else {
-                            localStorage.removeItem('rememberMe');
-                        }
+
+                        vm.remember ? localStorage.setItem('rememberMe', JSON.stringify(rememberMe)) : localStorage.removeItem('rememberMe');
 
                         vm.$router.push('/');
                     }).catch((error) => {

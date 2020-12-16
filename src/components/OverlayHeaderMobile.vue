@@ -78,8 +78,7 @@ export default {
             this.$emit('close');
         },
         logoff: function() {
-            this.isLogged = false;
-            localStorage.removeItem('userToken');
+            this.$emit('logoff');
         }
     }
 }
