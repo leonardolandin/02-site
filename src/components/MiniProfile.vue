@@ -1,11 +1,11 @@
 <template>
-    <div v-if="isLogged == true" class="userLogged" v-on:click="showOrHideUserOptions">
+    <div v-if="isLogged == true" class="userLogged" @click="showOrHideUserOptions">
         <img src="@/assets/header/user.png">
         <span>{{user.name}}</span>
         <div v-if="!isMobile" class="userOptions" v-bind:class="{ active: this.isActive }">
             <a href="/perfil">Meu Perfil</a>
             <a href="/minhas-atividades">Minhas Atividades</a>
-            <a class="last" v-on:click="logoff">Sair</a>
+            <a class="last" @click="logoff">Sair</a>
         </div>
     </div>
     <a v-else href="/entrar">
@@ -32,8 +32,7 @@ export default {
             this.isActive = !this.isActive;
         },
         logoff() {
-            this.isLogged = false;
-            localStorage.removeItem('userToken');
+            this.$emit('logoff');
         }   
     }
 }

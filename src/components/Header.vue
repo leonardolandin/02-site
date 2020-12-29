@@ -8,7 +8,7 @@
             <li v-if="!isMobile || isTablet"><a href="" class="configuration">Configurações</a></li>
         </ul>
         <div class="container-profile">
-            <MiniProfile v-bind:isLogged="this.userLogged" :user="this.user" :isMobile="isMobile"/>
+            <MiniProfile :isLogged="this.userLogged" :user="this.user" :isMobile="isMobile" @logoff="logoff"/>
         </div>
     </nav>
 </template>

@@ -26,7 +26,7 @@
                             <input type="password" id="passwordConfirmed" name="password" v-model="user.passwordConfirmed" placeholder="Digite sua confirmação de senha" v-bind:class="{ invalidField: this.errorInput }" required="required">
                         </div>
                         <div class="formGroup">
-                            <button type="button" v-on:click="submitSign(user)">Cadastrar</button>
+                            <button type="button" @click="submitSign(user)">Cadastrar</button>
                         </div>
                         <span class="errorInput">{{error}}</span>
                     </form>

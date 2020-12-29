@@ -24,7 +24,7 @@
                             <a class="formRecovery" href="#">Esqueceu a senha?</a>
                         </div>
                         <div class="formGroup">
-                            <button v-on:click="submitLogin(user)" type="button">Entrar</button>
+                            <button @click="submitLogin(user)" type="button">Entrar</button>
                         </div>
                         <span class="errorInput">{{error}}</span>
                         <div class="formGroup centerSign">
@@ -59,6 +59,8 @@ export default {
           if(response.data) {
               this.$router.push('/')
           }
+        }).catch(() => {
+            return false;
         })
 
         let rememberStorage =  JSON.parse(localStorage.getItem('rememberMe'))
