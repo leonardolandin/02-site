@@ -24,5 +24,6 @@
 .containerNot > span {
     font-family: monospace;
     font-size: 30px;
+    text-align: center;
 }
 </style>
