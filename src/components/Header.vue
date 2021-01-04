@@ -1,6 +1,6 @@
 <template>
     <nav class="header">
-        <OverlayHeaderMobile :show="show" :isLogged="this.userLogged" :user="this.user" @logoff="logoff" @close="openOverlay"/>
+        <OverlayHeaderMobile :show="show" :isLogged="this.userLoggedHeader" :user="this.user" @logoff="logoff" @close="openOverlay"/>
         <ul>
             <li class="burger-icon-container"><img src="@/assets/header/mobile/icon-burger.png" @click="openOverlay" alt="Hamburguer" class="burger-icon"></li>
             <li v-if="!isMobile || isTablet"><a href="/" class="home">Inicio</a></li>
@@ -8,7 +8,7 @@
             <li v-if="!isMobile || isTablet"><a href="" class="configuration">Configurações</a></li>
         </ul>
         <div class="container-profile">
-            <MiniProfile :isLogged="this.userLogged" :user="this.user" :isMobile="isMobile" @logoff="logoff"/>
+            <MiniProfile :isLogged="this.userLoggedHeader" :user="this.user" :isMobile="isMobile" @logoff="logoff"/>
         </div>
     </nav>
 </template>
@@ -17,31 +17,18 @@
 <script>
 import MiniProfile from '@/components/MiniProfile.vue';
 import OverlayHeaderMobile from '@/components/OverlayHeaderMobile.vue';
-import UserAPI from '@/services/User';
 import { isMobile, isTablet } from 'mobile-device-detect';
 
 export default {
   name: 'Header',
   components: { MiniProfile, OverlayHeaderMobile },
+  props: ['user', 'userLoggedHeader'],
   data() {
       return {
-          token: localStorage.getItem('userToken') || null,
-          userLogged: { type: Boolean, required: true },
-          user: { type: Object },
           isMobile: isMobile,
           isTablet: isTablet,
           show: false
       }
-  },
-  mounted() {
-      UserAPI.getUserLogged(this.token).then(response => {
-          if(response.data) {
-            this.user = response.data;
-            this.userLogged = true;
-          }
-      }).catch(() => {
-          this.userLogged = false;
-      })
   },
   methods: {
       openOverlay: function() {
@@ -50,8 +37,7 @@ export default {
           isMobile ? (document.body.style.overflow = "hidden") : (document.body.style.overflow = "visible");
       },
       logoff: function() {
-          this.userLogged = false;
-          localStorage.removeItem('userToken');
+          this.$emit('logoff');
       }
   }
 }
