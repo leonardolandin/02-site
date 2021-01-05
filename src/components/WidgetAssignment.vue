@@ -1,8 +1,18 @@
 <template>
-    <div class="widgetContainer">
+    <div class="widgetContainer" @click="uploadAssignment">
         <button class="buttonContainer"><img src="@/assets/home/upload-icon.png"></button>
     </div>
 </template>
+
+<script>
+export default {
+    methods: {
+        uploadAssignment: function() {
+            this.$router.push('nova-atividade')
+        }
+    }
+}
+</script>
 
 <style scoped>
     .widgetContainer {
