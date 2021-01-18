@@ -1,7 +1,7 @@
 <template>
     <div class="containerList">
         <div class="container-image" v-for="assignment in assignments" :key="assignment._id">
-            <img :src="assignment.imageUpload.stringBase64" :title="assignment.nameAssignment">
+            <img :src="assignment.imageUpload.path" :title="assignment.nameAssignment">
         </div>
     </div>
 </template>
@@ -32,5 +32,11 @@ export default {
         flex-wrap: wrap;
         max-width: 100%;
         max-height: 100%;
+    }
+
+    @media only screen and (max-width: 414px) {
+        .container-image > img {
+            max-width: 260px;
+        }
     }
 </style>

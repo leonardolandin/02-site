@@ -6,11 +6,11 @@
         <div class="containerUpload">
             <div v-show="!this.next">
                 <div class="viewImageUploaded">
-                    <img v-show="this.image.stringBase64" :src="this.image.stringBase64">
+                    <img v-show="this.image.path" :src="this.image.path">
                     <input @change="uploadImage" type="file" id="file" ref="file" accept="image/*">
                     <button @click="selectImage" class="buttonUploadImage">Selecionar imagem</button>
                 </div>
-                <button class="buttonUploadImage next" :disabled="!this.image.stringBase64" @click="nextForm">AVANÇAR</button>
+                <button class="buttonUploadImage next" :disabled="!this.image.path" @click="nextForm">AVANÇAR</button>
             </div>
             <div class="formAssignment" v-show="this.next">
                 <form>
@@ -64,7 +64,7 @@ export default {
             user: { type: Object },
             userLogged: false,
             token: localStorage.getItem('userToken') || null,
-            image: { stringBase64: null, name: null },
+            image: { path: null, name: null },
             next: false,
             errorInput: false,
             assignment: { typeAssignment: "0" },
@@ -114,7 +114,7 @@ export default {
             let fileReader = new FileReader();
 
             fileReader.onload = (e) => {
-                this.image.stringBase64 = e.target.result;
+                this.image.path = e.target.result;
                 this.image.name = file.name;
             };
 
@@ -125,8 +125,6 @@ export default {
         },
         sendAssignment: function(assignment) {
             let vm = this;
-
-            console.log(assignment)
 
             let assignmentObj = {
                 nameAssignment: assignment.name,

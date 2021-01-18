@@ -71,7 +71,7 @@ export default {
     display: flex;
     flex-wrap: wrap;
     max-width: 100%;
-    max-height: 100%;
+    max-height: 78%;
     padding: 50px;
 }
 </style>
