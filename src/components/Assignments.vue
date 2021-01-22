@@ -1,14 +1,19 @@
 <template>
     <div class="containerList">
         <div class="container-image" v-for="assignment in assignments" :key="assignment._id">
-            <img :src="assignment.imageUpload.path" :title="assignment.nameAssignment">
+            <img :src="assignment.imageUpload.path" :title="assignment.nameAssignment" @click="openAssignment(assignment._id)">
         </div>
     </div>
 </template>
 
 <script>
 export default {
-    props: ['assignments']
+    props: ['assignments'],
+    methods: {
+        openAssignment: function(idAssignment) {
+            this.$router.push(`/atividade/${idAssignment}`);
+        }
+    }
 }
 </script>
 

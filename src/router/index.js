@@ -6,6 +6,7 @@ import Login from '@/views/auth/Login.vue';
 import Sign from '@/views/auth/Sign.vue';
 import NotFound from '@/views/NotFound.vue';
 import UploadAssignment from '@/views/assignment/UploadAssignment.vue';
+import ViewAssignment from '@/views/assignment/ViewAssignment.vue';
 
 Vue.use(Router);
 
@@ -39,6 +40,12 @@ const routes = [
         path: '/nova-atividade',
         component: UploadAssignment,
         meta: { title: 'Enviar nova atividade' }
+    }, 
+    {
+        name: 'viewAssignment',
+        path: '/atividade/:id',
+        component: ViewAssignment,
+        meta: { title: 'sim' }
     }
 ]
 
