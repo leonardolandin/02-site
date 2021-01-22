@@ -26,7 +26,9 @@
                         <div class="formGroup">
                             <button @click="submitLogin(user)" type="button">Entrar</button>
                         </div>
-                        <span class="errorInput">{{error}}</span>
+                        <div class="container-error">
+                            <span class="errorInput">{{error}}</span>
+                        </div>
                         <div class="formGroup centerSign">
                             <a href="/cadastrar" class="formSign ">Cadastrar-se</a>
                         </div>
@@ -303,5 +305,11 @@ export default {
             .containerLogin {
                 width: 350px;
             }
+    }
+
+    .container-error {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
     }
 </style>
