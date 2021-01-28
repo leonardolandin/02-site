@@ -7,10 +7,16 @@ export default {
     sendAssignment: (assignment, userToken) => {
         return http.post('uploadAssignments', assignment, { headers: { 'Authorization': userToken } });
     },
-    getAssignmentById: (idAssignment) => {
-        return http.get(`/getAssignment/${idAssignment}`);
+    getAssignmentById: (idAssignment, token) => {
+        return http.get(`/getAssignment/${idAssignment}`, { headers: { 'Authorization': token } });
     },
     downloadImage: (url) => {
         return http.get(url, {responseType: 'arraybuffer'});
+    },
+    likeAssignment: (assignment) => {
+        return http.post('/likeAssignment', assignment)
+    },
+    favoriteAssignment: (assignment) => {
+        return http.post('/favoriteAssignment', assignment)
     }
 }

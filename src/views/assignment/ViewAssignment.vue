@@ -8,11 +8,31 @@
                 <div>
                     <img class="image" :src="this.assignment.imageUpload.path" :alt="this.assignment.imageUpload.name">
                     <div class="containerImageDownload">
-                        <button class="downloadImage" @click="downloadImage">Realizar download</button>
+                        <button class="downloadImage" @click="downloadImage">Obter imagem</button>
                     </div>
                 </div>
-                <div>
-
+                <div class="assignmentDetails">
+                    <div>
+                        <label for="">Nome:</label>
+                        <p>{{this.assignment.nameAssignment}}</p>
+                    </div>
+                    <div class="containerInfo">
+                        <label for="">Descrição:</label>
+                        <p>{{this.assignment.descriptionAssignment}}</p>
+                    </div>
+                    <div class="containerInfo">
+                        <label for="">Publico-Alvo:</label>
+                        <p>{{typePublic(this.assignment.typeAssignment)}}</p>
+                    </div>
+                    <div class="containerInfo">
+                        <p>O responsável pela atividade <b>{{isAutor(this.assignment.isAutor)}}</b></p>
+                    </div>
+                    <div class="containerInfo">
+                        <p class="date">Atividade criada em {{formatDate(this.assignment.created)}}</p>
+                    </div>
+                    <div class="containerInfo" v-if="this.userLogged">
+                        <AssignmentActions :assignment="this.assignment" :user="this.user"/>
+                    </div>
                 </div>
             </div>
         </div>
@@ -21,11 +41,12 @@
 
 <script>
 import Header from '@/components/Header.vue';
+import AssignmentActions from '@/components/AssignmentActions.vue';
 import UserAPI from '@/services/User';
 import AssignmentAPI from '@/services/Assignment';
 
 export default {
-    components: { Header },
+    components: { Header, AssignmentActions },
     data() {
         return {
             user: { type: Object },
@@ -44,8 +65,10 @@ export default {
             this.userLogged = false;
         })
 
-        AssignmentAPI.getAssignmentById(this.$route.params.id).then(response => {
+        AssignmentAPI.getAssignmentById(this.$route.params.id, this.token).then(response => {
             this.assignment = response.data;
+
+            document.title = `${this.assignment.nameAssignment} - 02`;
         })
 
     },
@@ -64,6 +87,37 @@ export default {
 
                 link.click();
             })
+        },
+        typePublic: function(type) {
+            if(type) {
+                switch(type) {
+                    case 'INFANT':
+                        return 'Ensino Infantil';
+                    case 'FUNDAMENTAL':
+                        return 'Ensino Fundamental';
+                    case 'MEDIUM':
+                        return 'Ensino Médio';
+                    case 'UPPER':
+                        return 'Ensino Superior';
+                }
+            }
+        },
+        formatDate: function(date) {
+            let dateFormat = new Date(date);
+
+            if(dateFormat) {
+                return `${this.addZero(dateFormat.getDay())}/${this.addZero(dateFormat.getMonth() + 1)}/${dateFormat.getFullYear()} ás ${dateFormat.getHours()}:${dateFormat.getMinutes()}`
+            }
+        },
+        addZero: function(number) {
+            if(number <= 9) {
+                return `0${+ number}` 
+            } else {
+                return number
+            }
+        },
+        isAutor: function(autor) {
+            return autor ? 'é o autor da imagem' : 'não é o autor da imagem';
         }
     }
 }
@@ -120,5 +174,34 @@ export default {
         line-height: inherit;
         text-transform: uppercase;
         cursor: pointer;
+    }
+
+    .assignmentDetails {
+        padding: 50px;
+        width: 100%;
+    }
+
+    .assignmentDetails > div > label {
+        display: block;
+        margin: 0 0 10px;
+        color: rgba(0, 0, 0, 0.6);
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 1;
+        text-transform: uppercase;
+        letter-spacing: .2em;
+    }
+
+    .assignmentDetails > div {
+        width: 100%;
+    }
+
+    .containerInfo {
+        margin-top: 25px;
+    }
+
+    .date {
+        color: rgba(0, 0, 0, 0.6);
+        font-weight: bold;
     }
 </style>>
