@@ -44,8 +44,7 @@ const routes = [
     {
         name: 'viewAssignment',
         path: '/atividade/:id',
-        component: ViewAssignment,
-        meta: { title: 'sim' }
+        component: ViewAssignment
     }
 ]
 

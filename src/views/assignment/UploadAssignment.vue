@@ -8,9 +8,12 @@
                 <div class="viewImageUploaded">
                     <img v-show="this.image.path" :src="this.image.path">
                     <input @change="uploadImage" type="file" id="file" ref="file" accept="image/*">
-                    <button @click="selectImage" class="buttonUploadImage">Selecionar imagem</button>
                 </div>
-                <button class="buttonUploadImage next" :disabled="!this.image.path" @click="nextForm">AVANÇAR</button>
+                <div>
+                    <button @click="selectImage" class="buttonUploadImage" v-if="!this.image.path">Selecionar imagem</button>
+                    <button @click="selectImage" class="buttonUploadImage" v-if="this.image.path">Alterar imagem</button>
+                    <button class="buttonUploadImage next" :disabled="!this.image.path" @click="nextForm">AVANÇAR</button>
+                </div>
             </div>
             <div class="formAssignment" v-show="this.next">
                 <form>
@@ -43,7 +46,8 @@
                        <span class="error">{{this.error}}</span>
                     </div>
                     <div class="formGroup center">
-                        <button class="buttonUploadImage" type="button" @click="sendAssignment(assignment)">ENVIAR</button>
+                        <button class="buttonUploadImage" type="button" v-if="!this.loading" @click="sendAssignment(assignment)">ENVIAR</button>
+                        <button class="buttonUploadImage" type="button" :disabled="this.loading" v-if="this.loading"><img src="@/assets/assignment/loading.gif"></button>
                     </div>
                 </form>
             </div>
@@ -69,6 +73,7 @@ export default {
             errorInput: false,
             assignment: { typeAssignment: "0" },
             error: '',
+            loading: false,
             optionsSchool: [{
                 name: "Ensino Infantil", value: "1"
             },
@@ -126,6 +131,8 @@ export default {
         sendAssignment: function(assignment) {
             let vm = this;
 
+            vm.loading = true;
+
             let assignmentObj = {
                 nameAssignment: assignment.name,
                 descriptionAssignment: assignment.description,
@@ -143,6 +150,7 @@ export default {
             }).catch(error => {
                 vm.error = error.response.data.message || "Ocorreu um erro inesperado";
                 vm.errorInput = true;
+                vm.loading = false;
             })
         }
     }
@@ -190,6 +198,11 @@ export default {
         line-height: inherit;
         text-transform: uppercase;
         cursor: pointer;
+        margin-right: 40px;
+    }
+
+    .buttonUploadImage > img {
+        width: 20px;
     }
 
     .viewImageUploaded > input[type=file] {
