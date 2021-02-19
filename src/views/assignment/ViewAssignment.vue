@@ -66,7 +66,12 @@ export default {
         })
 
         AssignmentAPI.getAssignmentById(this.$route.params.id, this.token).then(response => {
-            this.assignment = response.data;
+            this.assignment = response.data.assignment || response.data;
+
+            if(response.data.actions) {
+                this.assignment.like = response.data.actions.like;
+                this.assignment.favorite = response.data.actions.favorite;
+            }
 
             document.title = `${this.assignment.nameAssignment} - 02`;
         })
@@ -135,19 +140,21 @@ export default {
     }
 
     .containerDisplay {
-        height: 100%;
-        width: 100%;
+        padding-top: 30px;
         display: flex;
         justify-content: center;
-        align-items: center;
+        max-width: 100%;
+        max-height: 85%;
+        overflow: auto;
     }
 
     .containerAssignment {
         background-color: white;
         width: 1400px;
-        height: 760px;
+        padding: 60px;
         border-radius: 15px;
         display: flex;
+        height: 100%;
     }
 
     .image {

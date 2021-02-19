@@ -18,8 +18,8 @@ export default {
     props: ['assignment', 'user'],
     data() {
         return {
-            like: false,
-            favorite: false
+            like: this.assignment.like,
+            favorite: this.assignment.favorite
         }
     },
     methods: {
@@ -32,13 +32,22 @@ export default {
                 }
 
                 AssignmentAPI.likeAssignment(objLike).then(response => {
-                    console.log(response);
+                    this.like = response.data.like;
                 })
             }
         },
         favoriteAssignment: function(assignment) {
-            console.log(assignment)
-            this.favorite = !this.favorite
+            if(assignment) {
+                let objFavorite = {
+                    assignment: assignment._id,
+                    user: this.user._id,
+                    favorite: !this.favorite
+                }
+
+                AssignmentAPI.favoriteAssignment(objFavorite).then(response => {
+                    this.favorite = response.data.favorite;
+                })
+            }
         }
     }
 }
@@ -52,6 +61,7 @@ export default {
 
     .heart {
         width: 30px;
+        cursor: pointer;
     }
 
     .action {
