@@ -8,7 +8,7 @@
             <a class="last" @click="logoff">Sair</a>
         </div>
     </div>
-    <a v-else href="/entrar">
+    <a v-else @click="login">
         <div class="userNotLogged">
             <img src="@/assets/header/user.png">
             <span>Entrar</span>
@@ -33,7 +33,12 @@ export default {
         },
         logoff() {
             this.$emit('logoff');
-        }   
+        },
+        login() {
+            window.localStorage.setItem('checkpoint', this.$router.history.current.path)
+
+            this.$router.push('/entrar');
+        } 
     }
 }
 </script>
@@ -94,6 +99,7 @@ export default {
         justify-content: center;
         transition: 0.5s all;
         color: black;
+        cursor: pointer;
     }
 
     a:hover {

@@ -105,7 +105,9 @@ export default {
 
                         vm.remember ? localStorage.setItem('rememberMe', JSON.stringify(rememberMe)) : localStorage.removeItem('rememberMe');
 
-                        vm.$router.push('/');
+                        let checkpoint = localStorage.getItem('checkpoint') || '/';
+
+                        vm.$router.push(checkpoint);
                     }).catch((error) => {
                         vm.error = error.response.data.message || "Ocorreu um erro inesperado";
                         vm.errorInput = true;
