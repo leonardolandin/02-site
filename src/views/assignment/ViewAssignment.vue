@@ -111,14 +111,22 @@ export default {
             let dateFormat = new Date(date);
 
             if(dateFormat) {
-                return `${this.addZero(dateFormat.getDay())}/${this.addZero(dateFormat.getMonth() + 1)}/${dateFormat.getFullYear()} ás ${dateFormat.getHours()}:${dateFormat.getMinutes()}`
+                return `${this.addZero(dateFormat.getDay(), "DAY")}/${this.addZero(dateFormat.getMonth() + 1, "MONTH")}/${dateFormat.getFullYear()} ás ${dateFormat.getHours()}:${this.addZero(dateFormat.getMinutes(), "MINUTES")}`
             }
         },
-        addZero: function(number) {
-            if(number <= 9) {
-                return `0${+ number}` 
-            } else {
-                return number
+        addZero: function(number, type) {
+            if(type == "MONTH" || type == "DAY") {
+                if(number <= 9) {
+                    return `0${+ number}` 
+                } else {
+                    return number
+                }
+            } else if (type == "MINUTES") {
+                if(number.toString().length == 1) {
+                    return `0${number}`;
+                } else {
+                    return number
+                }
             }
         },
         isAutor: function(autor) {

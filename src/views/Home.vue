@@ -6,7 +6,7 @@
   <div class="container-assignment">
     <Assignments :assignments="this.assignments"/>
   </div>
-  <WidgetAssignment v-if="userLogged"/>
+  <WidgetAssignment/>
 </div>
 
 </template>

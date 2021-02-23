@@ -97,10 +97,22 @@ export default {
         }).catch(() => {
             this.userLogged = false;
         })
+
+        let preAssignment = JSON.parse(sessionStorage.getItem('preAssignment'));
+
+        if(preAssignment) {
+            this.image = preAssignment.imageUpload;
+            this.assignment.name = preAssignment.nameAssignment;
+            this.assignment.description = preAssignment.descriptionAssignment;
+            this.assignment.typeAssignment = preAssignment.typeAssignment;
+            this.assignment.isAutor = preAssignment.isAutor;
+            this.next = true;
+        }
     },
     methods: {
         logoff: function() {
             this.userLogged = false;
+            this.user = {};
             localStorage.removeItem('userToken');
         },
         selectImage: function() {
@@ -140,18 +152,32 @@ export default {
                 isAutor: assignment.isAutor ? true : false,
                 imageUpload: vm.image
             }
-            
-            AssignmentAPI.sendAssignment(assignmentObj, vm.user.token).then(response => {
-                if(response.data) {
-                    setTimeout(() => {
-                        vm.$router.push('/');
-                    }, 3000)
-                }
-            }).catch(error => {
-                vm.error = error.response.data.message || "Ocorreu um erro inesperado";
-                vm.errorInput = true;
-                vm.loading = false;
-            })
+
+            if(vm.userLogged) {
+                AssignmentAPI.sendAssignment(assignmentObj, vm.user.token).then(response => {
+                    if(response.data) {
+                        setTimeout(() => {
+                            sessionStorage.removeItem('preAssignment');
+                            vm.$router.push('/');
+                        }, 3000)
+                    }
+                }).catch(error => {
+                    vm.error = error.response.data.message || "Ocorreu um erro inesperado";
+                    vm.errorInput = true;
+                    vm.loading = false;
+                })
+            } else {
+                window.localStorage.setItem('checkpoint', this.$router.history.current.path);
+                this.saveAssignmentInSession(assignmentObj);
+
+                this.$router.push('/entrar');
+            }
+
+        },
+        saveAssignmentInSession: function (assignment) {
+            assignment.typeAssignment = this.assignment.typeAssignment;
+
+            window.sessionStorage.setItem('preAssignment', JSON.stringify(assignment));
         }
     }
 }
