@@ -4,8 +4,8 @@
         <ul>
             <li class="burger-icon-container"><img src="@/assets/header/mobile/icon-burger.png" @click="openOverlay" alt="Hamburguer" class="burger-icon"></li>
             <li v-if="!isMobile || isTablet"><a href="/" class="home">Inicio</a></li>
-            <li v-if="!isMobile || isTablet"><a href="" class="video">Video-Aula</a></li>
-            <li v-if="!isMobile || isTablet"><a href="" class="configuration">Configurações</a></li>
+            <li v-if="!isMobile || isTablet"><a href="/videos" class="video">Video-Aula</a></li>
+            <li v-if="!isMobile || isTablet"><a href="/configuracoes" class="configuration">Configurações</a></li>
         </ul>
         <div class="container-profile">
             <MiniProfile :isLogged="this.userLoggedHeader" :user="this.user" :isMobile="isMobile" @logoff="logoff"/>
