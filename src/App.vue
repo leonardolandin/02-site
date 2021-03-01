@@ -17,4 +17,10 @@
     width: 100%;
     height: 100%;
   }
+
+  button:disabled,
+  button[disabled] {
+    background-color: #cccccc !important;
+    color: #666666 !important;
+  }
 </style>

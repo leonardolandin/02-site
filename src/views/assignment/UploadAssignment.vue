@@ -251,12 +251,6 @@ export default {
         margin: 50px 0px 0px 0px;
     }
 
-    button:disabled,
-    button[disabled] {
-        background-color: #cccccc;
-        color: #666666;
-    }
-
     .formAssignment {
         box-sizing: border-box;
         border: 2px solid #efeeee;

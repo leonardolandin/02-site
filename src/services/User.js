@@ -9,5 +9,8 @@ export default {
     },
     signUser: (userCredentials) => {
         return http.post('register', userCredentials);
+    },
+    sendEmailRemember: (email) => {
+        return http.post('processNewTokenRemember', { email });
     }
 }

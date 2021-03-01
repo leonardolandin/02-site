@@ -7,10 +7,17 @@ import Sign from '@/views/auth/Sign.vue';
 import NotFound from '@/views/NotFound.vue';
 import UploadAssignment from '@/views/assignment/UploadAssignment.vue';
 import ViewAssignment from '@/views/assignment/ViewAssignment.vue';
+import Remember from '@/views/auth/Remember.vue';
 
 Vue.use(Router);
 
 const routes = [
+    {
+        name: 'notFound',
+        path: '*',
+        component: NotFound,
+        meta: { title: 'Pagina não encontrada' }
+    },
     {
         name: 'home',
         path: '/',
@@ -30,12 +37,6 @@ const routes = [
         meta: { title: 'Cadastrar - 02'}
     },
     {
-        name: 'notFound',
-        path: '*',
-        component: NotFound,
-        meta: { title: 'Pagina não encontrada' }
-    },
-    {
         name: 'uploadAssignment',
         path: '/nova-atividade',
         component: UploadAssignment,
@@ -45,7 +46,13 @@ const routes = [
         name: 'viewAssignment',
         path: '/atividade/:id',
         component: ViewAssignment
-    }
+    },
+    {
+        name: 'remember',
+        path: '/recuperar-senha',
+        component: Remember,
+        meta: { title: 'Recuperar senha - 02' }
+    },
 ]
 
 const router = new Router({ 

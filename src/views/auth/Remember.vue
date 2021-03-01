@@ -5,32 +5,19 @@
             </div>
             <div class="formPanel login">
                 <div class="headerLogin">
-                    <h1>Login</h1>
+                    <h1>Recuperar Senha</h1>
                 </div>
                 <div class="loginContent">
-                    <form action="">
+                    <form>
                         <div class="formGroup">
                             <label for="username">E-mail</label>
-                            <input type="text" id="username" name="email" placeholder="Digite seu e-mail" v-model="user.email" required="required" v-bind:class="{ invalidField: this.errorInput }">
+                            <input type="text" id="username" name="email" placeholder="Digite seu e-mail" v-model="email" required="required" v-bind:class="{ invalidField: this.errorInput }">
                         </div>
                         <div class="formGroup">
-                            <label for="password">Senha</label>
-                            <input type="password" id="password" name="password" v-model="user.password" placeholder="Digite sua senha" required="required" v-bind:class="{ invalidField: this.errorInput }">
-                        </div>
-                        <div class="formGroup">
-                            <label class="formRemember">
-                                <input type="checkbox" v-model="remember">Lembrar Meu Dados
-                            </label>
-                            <a class="formRecovery" href="/recuperar-senha">Esqueceu a senha?</a>
-                        </div>
-                        <div class="formGroup">
-                            <button @click="submitLogin(user)" type="button">Entrar</button>
+                            <button type="button" :disabled="!email" @click="sendEmail(email)">Enviar</button>
                         </div>
                         <div class="container-error">
                             <span class="errorInput">{{error}}</span>
-                        </div>
-                        <div class="formGroup centerSign">
-                            <a href="/cadastrar" class="formSign ">Cadastrar-se</a>
                         </div>
                     </form>
                 </div>
@@ -49,8 +36,7 @@ export default {
             secret: Environment.getSecretRecaptcha(),
             errorInput: false,
             error: '',
-            user: {},
-            remember: false,
+            email: null,
             token: localStorage.getItem('userToken') || null
         }
     },
@@ -64,14 +50,6 @@ export default {
         }).catch(() => {
             return false;
         })
-
-        let rememberStorage =  JSON.parse(localStorage.getItem('rememberMe'))
-
-        if(rememberStorage !== undefined && rememberStorage !== null) {
-            this.remember = rememberStorage.remember;
-            this.user.email = rememberStorage.email;
-            this.user.password = rememberStorage.password;
-        }
     },
     methods: {
         loadScriptAsync: function(url) {
@@ -86,33 +64,12 @@ export default {
                 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
             });
         },
-        submitLogin: function(user) {
-            let vm = this;
-            window.grecaptcha.ready(() => {
-                window.grecaptcha.execute(this.secret, {action: 'login'}).then(function(token) {
-                    user.recaptcha = token;
-                    User.getUserByEmail(user).then(response => {
-                        let userLogged = {
-                            user: response.data.user
-                        }
-                        let rememberMe = {
-                            email: userLogged.user.email,
-                            password: userLogged.user.password,
-                            remember: vm.remember
-                        }
-
-                        localStorage.setItem('userToken', userLogged.user.token);
-
-                        vm.remember ? localStorage.setItem('rememberMe', JSON.stringify(rememberMe)) : localStorage.removeItem('rememberMe');
-
-                        let checkpoint = localStorage.getItem('checkpoint') || '/';
-
-                        vm.$router.push(checkpoint);
-                    }).catch((error) => {
-                        vm.error = error.response.data.message || "Ocorreu um erro inesperado";
-                        vm.errorInput = true;
-                    })
-                })
+        sendEmail: function(email) {
+            User.sendEmailRemember(email).then(response => {
+                console.log(response);
+            }).catch(error => {
+                this.errorInput = true;
+                this.error = error.response.data.message;
             })
         }
     }
@@ -255,19 +212,6 @@ export default {
         transition: 0.3s ease;
     }
 
-    .formRemember {
-        font-size: 12px;
-        font-weight: 400;
-        letter-spacing: 0;
-        text-transform: none;
-    }
-
-    .formRecovery {
-        color: #4285F4;
-        font-size: 12px;
-        text-decoration: none;
-    }
-
     .loginContent > form > .formGroup > button {
         outline: none;
         background: #4285F4;
@@ -291,16 +235,6 @@ export default {
     .errorInput {
         color: red;
         margin-top: 15px;
-    }
-
-    .formSign {
-        color: #4285F4;
-        font-size: 18px;
-        text-decoration: none;
-    }
-
-    .centerSign {
-        justify-content: center;
     }
 
     @media only screen and (max-width: 414px) {
