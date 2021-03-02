@@ -12,5 +12,8 @@ export default {
     },
     sendEmailRemember: (email) => {
         return http.post('processNewTokenRemember', { email });
+    },
+    verifyTokenRemember: (token) => {
+        return http.get(`verifyTokenRemember/${token}`);
     }
 }

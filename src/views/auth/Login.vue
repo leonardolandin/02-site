@@ -8,7 +8,7 @@
                     <h1>Login</h1>
                 </div>
                 <div class="loginContent">
-                    <form action="">
+                    <form>
                         <div class="formGroup">
                             <label for="username">E-mail</label>
                             <input type="text" id="username" name="email" placeholder="Digite seu e-mail" v-model="user.email" required="required" v-bind:class="{ invalidField: this.errorInput }">

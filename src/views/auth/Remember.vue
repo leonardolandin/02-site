@@ -7,8 +7,8 @@
                 <div class="headerLogin">
                     <h1>Recuperar Senha</h1>
                 </div>
-                <div class="loginContent">
-                    <form>
+                <div class="loginContent" v-if="!success && !nextProcess">
+                    <div>
                         <div class="formGroup">
                             <label for="username">E-mail</label>
                             <input type="text" id="username" name="email" placeholder="Digite seu e-mail" v-model="email" required="required" v-bind:class="{ invalidField: this.errorInput }">
@@ -19,7 +19,25 @@
                         <div class="container-error">
                             <span class="errorInput">{{error}}</span>
                         </div>
-                    </form>
+                    </div>
+                </div>
+                <div class="loginContent" v-if="success && !nextProcess">
+                    <span>{{successMessage}} <b>{{emailSend}}</b></span>
+                </div>
+                <div class="loginContent" v-if="nextProcess">
+                    <div>
+                        <div class="formGroup">
+                            <label for="password">Nova senha</label>
+                            <input type="password" id="password" name="password" placeholder="Digite sua nova senha" required="required" v-bind:class="{ invalidField: this.errorInput }">
+                        </div>
+                        <div class="formGroup">
+                            <label for="password">Confirmar nova senha</label>
+                            <input type="password" id="password" name="password" placeholder="Confirme sua nova senha" required="required" v-bind:class="{ invalidField: this.errorInput }">
+                        </div>
+                        <div class="formGroup">
+                            <button type="button" :disabled="!email" >Salvar</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -37,7 +55,11 @@ export default {
             errorInput: false,
             error: '',
             email: null,
-            token: localStorage.getItem('userToken') || null
+            token: localStorage.getItem('userToken') || null,
+            success: false,
+            successMessage: '',
+            emailSend: '',
+            nextProcess: false
         }
     },
     mounted() {
@@ -50,6 +72,12 @@ export default {
         }).catch(() => {
             return false;
         })
+
+        if(this.$router.history.current.params.token) {
+            this.nextProcess = true;
+
+
+        }
     },
     methods: {
         loadScriptAsync: function(url) {
@@ -66,7 +94,11 @@ export default {
         },
         sendEmail: function(email) {
             User.sendEmailRemember(email).then(response => {
-                console.log(response);
+                if(response.data) {
+                    this.success = true;
+                    this.successMessage = response.data.message;
+                    this.emailSend = response.data.email;
+                }
             }).catch(error => {
                 this.errorInput = true;
                 this.error = error.response.data.message;
@@ -212,7 +244,7 @@ export default {
         transition: 0.3s ease;
     }
 
-    .loginContent > form > .formGroup > button {
+    .loginContent > div > .formGroup > button {
         outline: none;
         background: #4285F4;
         width: 100%;

@@ -53,6 +53,12 @@ const routes = [
         component: Remember,
         meta: { title: 'Recuperar senha - 02' }
     },
+    {
+        name: 'remember',
+        path: '/recuperar-senha/:token',
+        component: Remember,
+        meta: { title: 'Recuperar senha - 02' }
+    },
 ]
 
 const router = new Router({ 
