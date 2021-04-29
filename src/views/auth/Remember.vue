@@ -24,18 +24,25 @@
                 <div class="loginContent" v-if="success && !nextProcess">
                     <span>{{successMessage}} <b>{{emailSend}}</b></span>
                 </div>
-                <div class="loginContent" v-if="nextProcess">
+                <div class="loginContent" v-if="nextProcess && validToken">
                     <div>
                         <div class="formGroup">
                             <label for="password">Nova senha</label>
-                            <input type="password" id="password" name="password" placeholder="Digite sua nova senha" required="required" v-bind:class="{ invalidField: this.errorInput }">
+                            <input type="password" id="password" name="password" v-model="password" placeholder="Digite sua nova senha" required="required" v-bind:class="{ invalidField: this.errorInput }">
                         </div>
                         <div class="formGroup">
                             <label for="password">Confirmar nova senha</label>
-                            <input type="password" id="password" name="password" placeholder="Confirme sua nova senha" required="required" v-bind:class="{ invalidField: this.errorInput }">
+                            <input type="password" id="passwordConfirm" name="passwordConfirm" v-model="passwordConfirmed" placeholder="Confirme sua nova senha" required="required" v-bind:class="{ invalidField: this.errorInput }">
                         </div>
                         <div class="formGroup">
-                            <button type="button" :disabled="!email" >Salvar</button>
+                            <button type="button" :disabled="!password && !passwordConfirmed" @click="resetPassword(password, passwordConfirmed)">Salvar</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="loginContent" v-if="nextProcess && !validToken">
+                    <div>
+                        <div class="container-error">
+                            <span class="errorInput">{{error}}</span>
                         </div>
                     </div>
                 </div>
@@ -45,8 +52,8 @@
 </template>
 
 <script>
-import Environment from '@/services/Environment'
-import User from '@/services/User'
+import Environment from '@/services/Environment';
+import User from '@/services/User';
 
 export default {
     data() {
@@ -59,7 +66,10 @@ export default {
             success: false,
             successMessage: '',
             emailSend: '',
-            nextProcess: false
+            nextProcess: false,
+            password: null,
+            passwordConfirmed: null,
+            validToken: false
         }
     },
     mounted() {
@@ -76,7 +86,14 @@ export default {
         if(this.$router.history.current.params.token) {
             this.nextProcess = true;
 
-
+            User.verifyTokenRemember(this.$router.history.current.params.token).then(response => {
+                if(response.data) {
+                    this.validToken = true;
+                }
+            }).catch(error => {
+                this.error = error.response.data.message || 'Ocorreu um erro inesperado';
+                this.validToken = false;
+            });
         }
     },
     methods: {
@@ -103,6 +120,9 @@ export default {
                 this.errorInput = true;
                 this.error = error.response.data.message;
             })
+        },
+        resetPassword: function(password, passwordConfirm) {
+            console.log(password, passwordConfirm)
         }
     }
 }
