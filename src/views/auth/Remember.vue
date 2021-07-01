@@ -122,7 +122,11 @@ export default {
             })
         },
         resetPassword: function(password, passwordConfirm) {
-            console.log(password, passwordConfirm)
+            User.resetPassword({password, passwordConfirm}, this.$router.history.current.params.token).then(response => {
+                console.log(response);
+            }).catch(error => {
+                console.log(error.response);
+            })
         }
     }
 }

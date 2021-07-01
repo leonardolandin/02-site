@@ -16,7 +16,7 @@ export default {
     verifyTokenRemember: (token) => {
         return http.get(`verifyTokenRemember/${token}`);
     },
-    resetPassword: (passwordObj, user) => {
-        return http.post(`resetPassword/${user}`, passwordObj)
+    resetPassword: (passwordObj, token) => {
+        return http.post(`resetPassword/${token}`, passwordObj)
     }
 }
