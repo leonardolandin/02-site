@@ -24,7 +24,7 @@
                 <div class="loginContent" v-if="success && !nextProcess">
                     <span>{{successMessage}} <b>{{emailSend}}</b></span>
                 </div>
-                <div class="loginContent" v-if="nextProcess && validToken">
+                <div class="loginContent" v-if="nextProcess && validToken && !resetPasswordConfirmed">
                     <div>
                         <div class="formGroup">
                             <label for="password">Nova senha</label>
@@ -38,6 +38,9 @@
                             <button type="button" :disabled="!password && !passwordConfirmed" @click="resetPassword(password, passwordConfirmed)">Salvar</button>
                         </div>
                     </div>
+                </div>
+                <div class="loginContent" v-if="nextProcess && validToken && resetPasswordConfirmed">
+                    <span>{{successMessage}}</span>
                 </div>
                 <div class="loginContent" v-if="nextProcess && !validToken">
                     <div>
@@ -69,7 +72,8 @@ export default {
             nextProcess: false,
             password: null,
             passwordConfirmed: null,
-            validToken: false
+            validToken: false,
+            resetPasswordConfirmed: false
         }
     },
     mounted() {
@@ -123,9 +127,15 @@ export default {
         },
         resetPassword: function(password, passwordConfirm) {
             User.resetPassword({password, passwordConfirm}, this.$router.history.current.params.token).then(response => {
-                console.log(response);
+                this.resetPasswordConfirmed = true;
+                this.successMessage = response.data.message;
+
+                setTimeout(() => {
+                    this.$router.push('/entrar');
+                }, 3000)
             }).catch(error => {
-                console.log(error.response);
+                this.errorInput = true;
+                this.error = error.response.data.message || 'Ocorreu um erro inesperado';
             })
         }
     }
