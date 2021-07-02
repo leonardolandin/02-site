@@ -92,21 +92,12 @@ export default {
                 window.grecaptcha.execute(this.secret, {action: 'login'}).then(function(token) {
                     user.recaptcha = token;
                     User.getUserByEmail(user).then(response => {
-                        let userLogged = {
-                            user: response.data.user
-                        }
-                        let rememberMe = {
-                            email: userLogged.user.email,
-                            password: userLogged.user.password,
-                            remember: vm.remember
-                        }
-
-                        localStorage.setItem('userToken', userLogged.user.token);
-
-                        vm.remember ? localStorage.setItem('rememberMe', JSON.stringify(rememberMe)) : localStorage.removeItem('rememberMe');
-
+                        let user = response.data.user;
+                        let rememberMe = { email: user.email, password: user.password, remember: vm.remember };
                         let checkpoint = localStorage.getItem('checkpoint') || '/';
-
+                        vm.remember ? localStorage.setItem('rememberMe', JSON.stringify(rememberMe)) : localStorage.removeItem('rememberMe');
+                        
+                        localStorage.setItem('userToken', response.data.token);
                         vm.$router.push(checkpoint);
                     }).catch((error) => {
                         vm.error = error.response.data.message || "Ocorreu um erro inesperado";
