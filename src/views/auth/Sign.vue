@@ -80,7 +80,7 @@ export default {
                     user.recaptcha = token;
                     User.signUser(user).then(response => {
                         if(response.data.user) {
-                            localStorage.setItem('userToken', response.data.user.token);
+                            localStorage.setItem('userToken', response.data.token);
 
                             vm.$router.push('/');
                         }
