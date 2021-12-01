@@ -77,9 +77,9 @@ export default {
 
             window.grecaptcha.ready(() => {
                 window.grecaptcha.execute(this.secret, {action: 'login'}).then(function(token) {
-                    user.recaptcha = token;
+                    user.recaptchaToken = token;
                     User.signUser(user).then(response => {
-                        if(response.data.user) {
+                        if(response.data.token) {
                             localStorage.setItem('userToken', response.data.token);
 
                             vm.$router.push('/');

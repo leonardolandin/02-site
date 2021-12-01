@@ -2,13 +2,13 @@ import { http } from '@/services/config'
 
 export default {
     getUserLogged: (token) => {
-        return http.post(`userLogged`, {token});
+        return http.post(`auth/userLogged`, {token});
     },
     getUserByEmail: (objCredentials) => { 
-        return http.post('login', objCredentials);
+        return http.post('auth/login', objCredentials);
     },
     signUser: (userCredentials) => {
-        return http.post('register', userCredentials);
+        return http.post('auth/register', userCredentials);
     },
     sendEmailRemember: (email) => {
         return http.post('processNewTokenRemember', { email });

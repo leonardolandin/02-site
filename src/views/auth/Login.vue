@@ -90,9 +90,8 @@ export default {
             let vm = this;
             window.grecaptcha.ready(() => {
                 window.grecaptcha.execute(this.secret, {action: 'login'}).then(function(token) {
-                    user.recaptcha = token;
+                    user.recaptchaToken = token;
                     User.getUserByEmail(user).then(response => {
-                        let user = response.data.user;
                         let rememberMe = { email: user.email, password: user.password, remember: vm.remember };
                         let checkpoint = localStorage.getItem('checkpoint') || '/';
                         vm.remember ? localStorage.setItem('rememberMe', JSON.stringify(rememberMe)) : localStorage.removeItem('rememberMe');
